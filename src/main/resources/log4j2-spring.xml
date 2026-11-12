@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+
+        <RollingFile name="Archivo" fileName="logs/app.log"
+                     filePattern="logs/app-%d{yyyy-MM-dd}.log">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="20"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="com.ejemplo.demo" level="debug" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="Archivo"/>
+        </Logger>
+
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="Archivo"/>
+        </Root>
+    </Loggers>
+
+</Configuration>
+
+<!--
+<Appenders>: Definen dónde van los logs. Aquí configuramos dos destinos: Console (consola) y RollingFile (archivo).
+
+RollingFile: Crea logs/app.log y, cuando el día cambie o el archivo supere 10 MB, lo rota a un archivo con fecha (app-2025-01-15.log). max="20" conserva los últimos 20 archivos .
+
+<Logger name="com.ejemplo.demo" level="debug">: Todo lo que loguees desde tus clases (ProductoController, ProductoService, etc.) saldrá con nivel DEBUG o superior. additivity="false" evita que el log se duplique (que se procese también por el Root).
+
+<Root level="info">: Es el logger por defecto para todo lo demás (Spring, Hibernate, etc.). Solo muestra INFO, WARN y ERROR.
+
+PatternLayout: Define el formato: fecha, hilo, nivel, nombre del logger y mensaje.
+
+-->
